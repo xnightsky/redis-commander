@@ -1,7 +1,31 @@
 <div id="itemActionsBar">
   <button class="btn btn-danger" onclick="deleteKey('<%= connectionId %>','<%= key %>')">Delete Key</button>
+  <div id="pageNav" class="input-append input-prepend">
+    <div class="btn-group">
+      <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
+        <b class="icon-th-large"></b>
+        View...
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+          <a data-toggle="modal" id="" href="#" onclick="selectTreeNodeHash(null, 'table');">
+            <b class="icon-th"></b>
+            Table
+          </a>
+        </li>
+        <li>
+          <a data-toggle="modal" id="" href="#" onclick="selectTreeNodeHash(null, 'colloapse');">
+            <b class="icon-th-list"></b>
+            Collapse
+          </a>
+        </li>
+      </ul>
+      </div>
+  </div>
 </div>
 <div id="itemData">
+<% if (!dataView || 'table' == dataView) {%>
   <table class="table">
     <thead>
       <th>Field</th>
@@ -15,10 +39,33 @@
         <% console.log(data[field]);%>
           <td><%= data[field] %></td>
         </tr>
-      <% } %>
+    <% } %>
     </tbody>
    </table>
+
+<% } else if ('colloapse' == dataView) {%>
+  <div class="accordion" id="accordionpView">
+  <% for(var field in data) { %>
+      <% console.log(field);%>
+      <% console.log(data[field]);%>
+      <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionpView" href="#collapse_<%= field %>">
+          <%= field %>
+        </a>
+      </div>
+      <div id="collapse_<%= field %>" class="accordion-body collapse">
+        <div class="accordion-inner">
+          <%= data[field] %>
+        </div>
+      </div>
+    </div>
+  <% } %>
+<% } %>
 </div>
+
+</div>
+
 <script type="text/javascript">
   $(document).ready(function(){
     $('.table tbody tr').dblclick(function(event) {

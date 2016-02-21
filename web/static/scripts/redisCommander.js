@@ -2,6 +2,9 @@
 var foldingCharacter = ":";
 
 var CmdParser = require('cmdparser');
+
+var cacheData = {}
+
 function loadTree () {
   $.get('/apiv1/connection', function (isConnected) {
     if (isConnected) {
@@ -180,6 +183,7 @@ function loadKey (connectionId, key, index) {
     }
 
     data = JSON.parse(data);
+    cacheData = data;
     data.connectionId = connectionId;
     console.log("rendering type " + data.type);
     switch (data.type) {
@@ -411,7 +415,10 @@ function selectTreeNodeString (data) {
   }
 }
 
-function selectTreeNodeHash (data) {
+function selectTreeNodeHash (data, dataView) {
+  data = data || cacheData;
+  dataView = dataView || 'table';
+  data['dataView'] = dataView;
   var html = new EJS({ url: '/templates/editHash.ejs' }).render(data);
   $('#body').html(html);
 }
